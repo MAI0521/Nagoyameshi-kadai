@@ -1,0 +1,123 @@
+ <!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+           
+         <title>会員情報</title>   
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pb-5 nagoyameshi-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xl-5 col-lg-6 col-md-8">
+                             <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                 <ol class="breadcrumb mb-0"> 
+                                     <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>                       
+                                     <li class="breadcrumb-item active" aria-current="page">会員情報</li>
+                                 </ol>
+                             </nav> 
+                             
+                             <h1 class="mb-3 text-center">会員情報</h1> 
+                             
+                             <div class="d-flex justify-content-end align-items-end mb-3">                    
+                                 <div>
+                                     <a th:href="@{/user/edit}">編集</a>                        
+                                 </div>
+                             </div>                                       
+                             
+                             <div th:if="${successMessage}" class="alert nagoyameshi-alert-info">
+                                 <span th:text="${successMessage}"></span>
+                             </div>                               
+                             
+                             <div class="container mb-4">
+                                 <div class="row pb-2 mb-2 border-bottom">
+                                     <div class="col-4">
+                                         <span class="fw-bold">氏名</span>
+                                     </div>
+             
+                                     <div class="col">
+                                         <span th:text="${user.getFullName()}"></span>
+                                     </div>
+                                 </div>                    
+             
+                                 <div class="row pb-2 mb-2 border-bottom">
+                                     <div class="col-4">
+                                         <span class="fw-bold">フリガナ</span>
+                                     </div>
+             
+                                     <div class="col">
+                                         <span th:text="${user.getKana()}"></span>
+                                     </div>
+                                 </div>            
+                                 
+                                 <div class="row pb-2 mb-2 border-bottom">
+                                     <div class="col-4">
+                                         <span class="fw-bold">メールアドレス</span>
+                                     </div>
+             
+                                     <div class="col">
+                                         <span th:text="${user.getEmail()}"></span>
+                                     </div>
+                                 </div>   
+                                 <div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_PAID')">
+                                     <div class="col-4">
+                                         <span class="fw-bold" >会員ステータス</span>
+                                     </div>
+             
+                                     <div class="col">
+										 <span sec:authorize="hasAnyAuthority('ROLE_PAID')" 
+									     th:text="有料会員"></span>
+                                     </div>
+                                 </div>
+<!--                                 <form method="get" th:action="@{/user/downgrade}">-->
+                                 <div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_PAID')">
+                                     <form method="post" th:action="@{/user/downgrade}">
+									    <div class="form-group">
+									        <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">解約する</button>
+									    </div>  
+									</form> 
+                                 </div>
+                                 <div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_GENERAL')">
+                                     <div class="col-4">
+                                         <span class="fw-bold">会員ステータス</span>
+                                     </div>
+             
+                                     <div class="col">
+										 <span sec:authorize="hasAnyAuthority('ROLE_GENERAL')" 
+						
+									     th:text="無料会員"></span>
+                                     </div>
+                                 </div>  
+                                 <div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_GENERAL')">
+                                     <div class="form-group">
+										 <form action="/user/create-checkout-session" method="POST">
+<!--										 <a href="/upgrade" class="btn">有料プランに登録する</a>-->
+										 <input type="hidden" name="priceId" value="price_1Q9M3bG1Q8EB8XUacUbkFtmb" />
+                                         <button type="submit" id="subscribe-button" class="btn text-white shadow-sm w-100 nagoyameshi-btn">有料プランに登録する</button>
+                                     	 </form>
+                                     </div>  
+                                 </div>                                
+                             </div>                                                                                                                           
+                         </div>
+                     </div>
+                 </div>
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+          <script src="https://js.stripe.com/v3"></script>
+         <script th:inline="javascript">
+             const sessionId = /*[[${sessionId}]]*/"sessionId";                
+         </script>        
+         <script th:src="@{/js/stripe.js}"></script>   
+   </body>
+ </html>

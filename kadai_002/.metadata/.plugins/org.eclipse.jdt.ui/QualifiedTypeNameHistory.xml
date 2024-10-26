@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.repository.UserRepository"/>
+    <fullyQualifiedTypeName name="jakarta.transaction.Transactional"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.repository.FavoritesRepository"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.entity.Favorites"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.security.UserDetailsImpl"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.service.FavoriteService"/>
+    <fullyQualifiedTypeName name="org.springframework.security.core.annotation.AuthenticationPrincipal"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.repository.FavoriteRepository"/>
+    <fullyQualifiedTypeName name="org.apache.catalina.User"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.entity.House"/>
+    <fullyQualifiedTypeName name="com.example.samuraitravel.entity.Favorite"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Controller"/>
+    <fullyQualifiedTypeName name="com.example.nagoyameshi.form.ReservationInputForm"/>
+    <fullyQualifiedTypeName name="org.springframework.security.core.userdetails.User"/>
+    <fullyQualifiedTypeName name="com.example.nagoyameshi.entity.User"/>
+    <fullyQualifiedTypeName name="java.time.format.DateTimeFormatter"/>
+    <fullyQualifiedTypeName name="com.example.nagoyameshi.security.UserDetailsImpl"/>
+    <fullyQualifiedTypeName name="lombok.Value"/>
+    <fullyQualifiedTypeName name="jakarta.servlet.http.HttpServletRequest"/>
+    <fullyQualifiedTypeName name="com.example.nagoyameshi.service.StripeService"/>
+    <fullyQualifiedTypeName name="com.stripe.model.billingportal.Session"/>
+    <fullyQualifiedTypeName name="com.stripe.exception.InvalidRequestException"/>
+    <fullyQualifiedTypeName name="com.stripe.exception.AuthenticationException"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="ch.qos.logback.classic.Logger"/>
+    <fullyQualifiedTypeName name="org.hibernate.validator.internal.util.logging.LoggerFactory"/>
+    <fullyQualifiedTypeName name="org.apache.tomcat.util.net.openssl.ciphers.Authentication"/>
+    <fullyQualifiedTypeName name="org.springframework.security.core.Authentication"/>
+    <fullyQualifiedTypeName name="com.example.nagoyameshi.service.UserNotFoundException"/>
+    <fullyQualifiedTypeName name="com.stripe.model.EventDataObjectDeserializer"/>
+    <fullyQualifiedTypeName name="com.stripe.model.checkout.Session"/>
+    <fullyQualifiedTypeName name="java.time.LocalDate"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
+    <fullyQualifiedTypeName name="ch.qos.logback.core.model.Model"/>
+    <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
+    <fullyQualifiedTypeName name="org.apache.catalina.connector.Response"/>
+    <fullyQualifiedTypeName name="com.stripe.model.Event.Request"/>
+    <fullyQualifiedTypeName name="org.apache.coyote.Response"/>
+    <fullyQualifiedTypeName name="com.stripe.param.checkout.SessionRetrieveParams"/>
+    <fullyQualifiedTypeName name="org.apache.el.stream.Optional"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+    <fullyQualifiedTypeName name="org.hibernate.boot.jaxb.JaxbLogger_.logger"/>
+    <fullyQualifiedTypeName name="ch.qos.logback.core.net.SyslogOutputStream"/>
+    <fullyQualifiedTypeName name="com.stripe.param.SubscriptionUpdateParams"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.CascadeType"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.FetchType"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.OneToMany"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
+    <fullyQualifiedTypeName name="com.stripe.model.Subscription"/>
+</qualifiedTypeNameHistroy>
+=======
+<qualifiedTypeNameHistroy/>
+>>>>>>> a5340638c0bf8f2407ce81ff741f3c6c9c854c0f

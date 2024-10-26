@@ -1,0 +1,26 @@
+package com.example.samuraitravel.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReviewRepository;
+import com.example.samuraitravel.repository.UserRepository;
+import com.example.samuraitravel.service.ReviewService;
+
+@Controller
+@RequestMapping("/houses")
+public class ReviewController {
+	 private final ReviewRepository reviewRepository;    
+	 private final HouseRepository houseRepository;
+	 private final UserRepository userRepository;
+     private final ReviewService reviewService; 
+    
+     public ReviewController(ReviewRepository reviewRepository, HouseRepository houseRepository, UserRepository userRepository, ReviewService reviewService) {        
+        this.reviewRepository = reviewRepository; 
+        this.houseRepository = houseRepository;
+        this.userRepository = userRepository;
+        this.reviewService = reviewService;
+    } 
+     
+ }

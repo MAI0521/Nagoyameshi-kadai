@@ -1,0 +1,36 @@
+const stripe = Stripe('pk_test_51Q9M36G1Q8EB8XUa1JzgsvmXZCtUyDFLeJozJOM78A4gjNbfUNZ3ITbwn0gQOjvCoQYnDxYzPdI2oSpjtQqZsnlp00N7ic3SNK');
+
+const paymentForm = document.querySelector('form[action="/user/create-checkout-session"]');
+
+paymentForm.addEventListener('submit', async (event) => {
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Create a checkout session by calling your backend
+    const response = await fetch('/user/create-checkout-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            priceId: document.querySelector('input[name="priceId"]').value
+        }),
+    });
+
+    // Check if the response is OK
+    if (response.ok) {
+        const { sessionId } = await response.json();
+        
+        // Redirect to Stripe Checkout
+        const result = await stripe.redirectToCheckout({ sessionId });
+
+        // Handle any errors returned by Stripe
+        if (result.error) {
+            alert(result.error.message);
+        }
+    } else {
+        // Handle error response from your backend
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message || 'Failed to create checkout session'}`);
+    }
+});

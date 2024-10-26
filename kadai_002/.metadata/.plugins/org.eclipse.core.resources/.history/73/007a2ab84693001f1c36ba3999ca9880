@@ -1,0 +1,5 @@
+package com.example.nagoyameshi.event;
+
+public class PasswordEvent {
+
+}

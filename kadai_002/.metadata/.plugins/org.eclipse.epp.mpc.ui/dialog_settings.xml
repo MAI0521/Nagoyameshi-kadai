@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.epp.internal.mpc.ui.wizards.MarketplaceWizardDialog_dialogBounds.absolute">
+<<<<<<< HEAD
+		<item key="DIALOG_X_ORIGIN" value="463"/>
+		<item key="DIALOG_Y_ORIGIN" value="427"/>
+		<item key="DIALOG_WIDTH" value="784"/>
+		<item key="DIALOG_HEIGHT" value="950"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+=======
+		<item key="DIALOG_X_ORIGIN" value="1113"/>
+		<item key="DIALOG_Y_ORIGIN" value="362"/>
+		<item key="DIALOG_WIDTH" value="654"/>
+		<item key="DIALOG_HEIGHT" value="880"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+>>>>>>> a5340638c0bf8f2407ce81ff741f3c6c9c854c0f
+	</section>
+</section>

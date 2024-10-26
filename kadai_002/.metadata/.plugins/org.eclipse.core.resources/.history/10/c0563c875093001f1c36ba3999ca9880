@@ -1,0 +1,56 @@
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.nagoyameshi.event.PasswordEventPublisher;
+import com.example.nagoyameshi.form.PasswordResetVerifyForm;
+import com.example.nagoyameshi.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
+@Controller
+public class PasswordResetController {
+    private final UserService userService;
+    private final PasswordEventPublisher passwordEventPublisher;
+
+    public PasswordResetController(UserService userService, PasswordEventPublisher passwordEventPublisher) {
+        this.userService = userService;
+        this.passwordEventPublisher = passwordEventPublisher;
+    }
+
+    @GetMapping("/pwreset")
+    public String pwresetForm(Model model) {
+        model.addAttribute("passwordResetVerifyForm", new PasswordResetVerifyForm());
+        return "auth/pwreset";
+    }
+
+    @PostMapping("/pwreset")
+    public String submitPwreset(
+            @Valid PasswordResetVerifyForm passwordResetVerifyForm, 
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            return "auth/pwreset";
+        }
+
+        // Verify email existence
+        User user = userRepository.findByUser(passwordResetVerifyForm.getEmail());
+        if (user == null) {
+            bindingResult.rejectValue("email", "error.passwordResetVerifyForm", "このメールアドレスはまだ登録されていません。");
+            return "auth/pwreset";
+        }
+
+        // Publish the password reset event
+        String requestUrl = request.getRequestURL().toString();
+        passwordEventPublisher.publishPasswordEvent(user, requestUrl);
+
+        redirectAttributes.addFlashAttribute("successMessage", "認証メールを送信しました。メールのリンクを確認してください。");
+        return "redirect:/";
+    }
+}

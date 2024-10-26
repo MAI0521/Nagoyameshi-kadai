@@ -1,0 +1,28 @@
+package com.example.samuraitravel.form;
+
+import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.entity.User;
+import com.example.samuraitravel.entity.Review;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+ 
+ @Data
+ @AllArgsConstructor
+
+public class ReviewEditForm {
+
+	private Integer id;
+	 
+	 private Integer house;
+
+     private Integer user;    
+     
+     @NotNull(message = "評価を選択してください。")
+     private Integer starId;    
+         
+     @NotBlank(message = "コメントを入力してください。")
+     private String comment;
+	}

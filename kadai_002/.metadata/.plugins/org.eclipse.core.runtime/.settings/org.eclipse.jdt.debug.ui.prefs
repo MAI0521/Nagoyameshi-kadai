@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+<<<<<<< HEAD
+org.eclipse.debug.ui.VariableView.org.eclipse.jdt.debug.ui.show_null_entries=true
+=======
+>>>>>>> a5340638c0bf8f2407ce81ff741f3c6c9c854c0f
+org.eclipse.jdt.debug.ui.javaDebug.alertHCRFailed=false
+org.eclipse.jdt.debug.ui.javaDebug.alertHCRNotSupported=false
+org.eclipse.jdt.debug.ui.prompt_unable_to_install_breakpoint=false

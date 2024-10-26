@@ -1,0 +1,21 @@
+package com.example.nagoyameshi.event;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
+
+import com.example.nagoyameshi.entity.User;
+
+@Component
+public class PasswordEventPublisher {
+    private final ApplicationEventPublisher applicationEventPublisher;
+    
+    public PasswordEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;                
+    }
+    
+    public void publishPasswordEvent(User user, String requestUrl) {
+        String token = verificationTokenService.createTokenForUser(user); // Create and store token
+        String resetLink = requestUrl + "/verify?token=" + token;
+        emailService.sendPasswordResetEmail(user.getEmail(), resetLink); // Send email
+    }
+}

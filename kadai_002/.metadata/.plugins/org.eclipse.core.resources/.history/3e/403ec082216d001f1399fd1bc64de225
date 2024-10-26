@@ -1,0 +1,47 @@
+package com.example.samuraitravel.service;
+
+ import java.awt.print.Pageable;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
+
+import org.springframework.data.domain.ScrollPosition.Direction;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.entity.Reservation;
+import com.example.samuraitravel.entity.User;
+import com.example.samuraitravel.entity.Review;
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReservationRepository;
+import com.example.samuraitravel.repository.UserRepository;
+
+import ch.qos.logback.core.model.Model;
+
+import com.example.samuraitravel.repository.ReviewRepository;
+ 
+ @Service
+public class ReviewService {
+	private final ReviewRepository reviewRepository;  
+	private final HouseRepository houseRepository;  
+	private final UserRepository userRepository;  
+
+	public ReviewService(ReviewRepository reviewRepository, HouseRepository houseRepository, UserRepository userRepository) {
+	    this.reviewRepository = reviewRepository;  
+	    this.houseRepository = houseRepository;  
+	    this.userRepository = userRepository;  
+	}
+	
+    @GetMapping("/reviews")
+    public String index(@PageableDefault(page = 0, size = 10, sort = "created_at", direction = Direction.ASC) Pageable pageable, Model model) 
+        Review review = reviewRepository.OrderByCreatedAtDesc(pageable);
+        
+        model.addAttribute("reviewPage", reviewPage);         
+        
+        return "reviews/index";
+    }
+}
+ }

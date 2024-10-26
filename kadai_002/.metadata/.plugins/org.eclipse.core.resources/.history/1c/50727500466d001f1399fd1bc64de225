@@ -1,0 +1,51 @@
+package com.example.samuraitravel.service;
+
+ import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.entity.Review;
+import com.example.samuraitravel.entity.User;
+import com.example.samuraitravel.form.ReviewForm;
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReviewRepository;
+import com.example.samuraitravel.repository.UserRepository;
+ 
+ @Service
+public class ReviewService {
+	 @Autowired
+	private final ReviewRepository reviewRepository;  
+	private final HouseRepository houseRepository;  
+	private final UserRepository userRepository;  
+	
+	public ReviewService(ReviewRepository reviewRepository, HouseRepository houseRepository, UserRepository userRepository) {
+	    this.reviewRepository = reviewRepository;  
+	    this.houseRepository = houseRepository;  
+	    this.userRepository = userRepository; 
+	    
+	}
+	
+
+	@Transactional
+    public void create(ReviewForm reviewForm, User user) {
+		// Validate ReviewForm
+        if (reviewForm == null) {
+            throw new IllegalArgumentException("まだレビューがありません。");
+        }
+		
+		// Retrieve the House entity using the HouseService
+		Integer houseId = reviewForm.getHouse();
+        House house = houseRepository.getReferenceById(houseId);
+
+        // Create a new Review instance
+        Review review = new Review();
+        review.setHouse(house);
+        review.setUser(user);
+        review.setStarId(reviewForm.getStarId());
+        review.setComment(reviewForm.getComment());
+
+        // Save the review
+        reviewRepository.save(review);
+    }
+}

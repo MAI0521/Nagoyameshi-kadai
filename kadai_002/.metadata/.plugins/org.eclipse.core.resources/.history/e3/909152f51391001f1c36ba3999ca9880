@@ -1,0 +1,38 @@
+package com.example.nagoyameshi.controller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.service.RestaurantService;
+import com.example.nagoyameshi.service.ReviewService;
+
+ @Controller
+public class HomeController {
+	 private final RestaurantService restaurantService;
+	 private final ReviewService reviewService;
+
+    public HomeController(RestaurantService restaurantService, ReviewService reviewService) {
+        this.restaurantService = restaurantService;
+        this.reviewService = reviewService;
+    }
+	    
+     @GetMapping("/")
+     public String index(Model model) {
+    	 List<Restaurant> newRestaurants = restaurantService.findTop8RestaurantsByOrderByCreatedAtDesc();
+         List<Restaurant> popularRestaurants = restaurantService.findTop3RestaurantsByOrderByReviewCountDesc();
+         List<Object[]> reviewCounts = reviewService.getReviewCountPerRestaurant();
+         List<Object[]> averageReviews = reviewService.getAverageReviewsPerRestaurant();
+         
+         
+         model.addAttribute("newRestaurants", newRestaurants);
+         model.addAttribute("popularRestaurants", popularRestaurants);
+         model.addAttribute("reviewCounts", reviewCounts);
+         model.addAttribute("averageReviews", averageReviews);
+         return "index";
+     }   
+}
+

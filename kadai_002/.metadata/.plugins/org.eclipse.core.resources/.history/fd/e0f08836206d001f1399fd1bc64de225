@@ -1,0 +1,31 @@
+package com.example.samuraitravel.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReviewRepository;
+import com.example.samuraitravel.repository.UserRepository;
+ 
+ @Service
+public class ReviewService {
+	private final ReviewRepository reviewRepository;  
+	private final HouseRepository houseRepository;  
+	private final UserRepository userRepository;  
+
+	public ReviewService(ReviewRepository reviewRepository, HouseRepository houseRepository, UserRepository userRepository) {
+	    this.reviewRepository = reviewRepository;  
+	    this.houseRepository = houseRepository;  
+	    this.userRepository = userRepository;  
+	}
+	
+    @GetMapping("/reviews")
+    public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, @PageableDefault(page = 0, size = 10, sort = "created_at", direction = Direction.ASC) Pageable pageable, Model model) 
+        Page<Review> reviewPage = reviewRepository.OrderByCreatedAtDesc(pageable);
+        
+        model.addAttribute("reviewPage", reviewPage);         
+        
+        return "reviews/index";
+    }
+}
+ }

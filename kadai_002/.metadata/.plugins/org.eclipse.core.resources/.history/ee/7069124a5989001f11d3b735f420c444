@@ -1,0 +1,80 @@
+package com.example.nagoyameshi.service;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.form.UserEditForm;
+import com.example.nagoyameshi.repository.UserRepository;
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    
+    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;       
+        this.passwordEncoder = passwordEncoder;
+    }    
+    
+    @Transactional
+    public User create(SignupForm signupForm) {
+        User user = new User();
+        boolean isPaidLicenseChecked = signupForm.isPaidLicense();
+        
+        user.setFullName(signupForm.getFullName());
+        user.setKana(signupForm.getKana());
+        user.setEmail(signupForm.getEmail());
+        user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
+        user.setPaidLicense(isPaidLicenseChecked);
+        user.setAdmin(false); 
+        user.setEnabled(false);
+        
+        return userRepository.save(user);
+    } 
+    
+    @Transactional
+    public void update(UserEditForm userEditForm) {
+        User user = userRepository.getReferenceById(userEditForm.getId());
+        
+        user.setFullName(userEditForm.getFullName());
+        user.setKana(userEditForm.getKana());
+        user.setEmail(userEditForm.getEmail());      
+        
+        userRepository.save(user);
+    }    
+    
+    // メールアドレスが登録済みかどうかをチェックする
+    public boolean isEmailRegistered(String email) {
+        User user = userRepository.findByEmail(email);  
+        return user != null;
+    }  
+    
+    // パスワードとパスワード（確認用）の入力値が一致するかどうかをチェックする
+    public boolean isSamePassword(String password, String passwordConfirmation) {
+        return password.equals(passwordConfirmation);
+    } 
+    
+    // ユーザーを有効にする
+    @Transactional
+    public void enableUser(User user) {
+        user.setEnabled(true); 
+        userRepository.save(user);
+    } 
+    
+    // メールアドレスが変更されたかどうかをチェックする
+    public boolean isEmailChanged(UserEditForm userEditForm) {
+        User currentUser = userRepository.getReferenceById(userEditForm.getId());
+        return !userEditForm.getEmail().equals(currentUser.getEmail());      
+    }  
+    
+//    @Transactional
+//    public User upgrade(Map<String, String> paymentIntentObject) {
+//        String userName = String.valueOf(paymentIntentObject.get("userName"));
+        
+//        User user = userRepository.findByEmail(userName);
+//        return user;
+//    }
+}

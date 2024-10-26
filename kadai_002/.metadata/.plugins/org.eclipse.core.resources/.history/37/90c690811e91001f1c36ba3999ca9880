@@ -1,0 +1,49 @@
+package com.example.nagoyameshi.service;
+ 
+ import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.nagoyameshi.entity.Category;
+import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.form.CategoryRegisterForm;
+import com.example.nagoyameshi.form.RestaurantEditForm;
+import com.example.nagoyameshi.form.RestaurantRegisterForm;
+import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.RestaurantRepository;
+ 
+ @Service
+ public class CategoryService {
+     private final CategoryRepository categoryRepository;    
+     
+     public RestaurantService(CategoryRepository categoryRepository) {
+         this.categoryRepository = categoryRepository;        
+     }    
+     
+     @Transactional
+     public void create(CategoryRegisterForm categoryRegisterForm) {
+    	 Category category = new Category();        
+    	 
+    	 category.setName(categoryRegisterForm.getName());
+                     
+    	 categoryRepository.save(category);
+     }  
+     
+     @Transactional
+     public void update(CategoryEditForm categoryEditForm) {
+    	 Category category = categoryRepository.getReferenceById(categoryEditForm.getId());
+         
+    	 category.setName(categoryEditForm.getName()); 
+     
+    	 categoryRepository.save(category);
+     }   

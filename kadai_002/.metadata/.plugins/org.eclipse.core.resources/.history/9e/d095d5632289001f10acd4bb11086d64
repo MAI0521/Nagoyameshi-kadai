@@ -1,0 +1,12 @@
+package com.example.nagoyameshi.service;
+
+public class Snippet {
+	public static void main(String[] args) {
+		 <dependency>
+		     <groupId>com.stripe</groupId>
+		     <artifactId>stripe-java</artifactId>
+		     <version>26.0.0</version>
+		 </dependency> 
+	}
+}
+

@@ -1,0 +1,12 @@
+ const stripe = Stripe('pk_test_51Q9M36G1Q8EB8XUa1JzgsvmXZCtUyDFLeJozJOM78A4gjNbfUNZ3ITbwn0gQOjvCoQYnDxYzPdI2oSpjtQqZsnlp00N7ic3SNK');
+ 
+ document.getElementById('subscribe-button').addEventListener('click', async () => {
+    const { sessionId } = await fetch('/create-ceckout-session', {
+        method: 'POST',
+    }).then((response) => response.json());
+
+    const result = await stripe.redirectToCheckout({ sessionId });
+    if (result.error) {
+        alert(result.error.message);
+    }
+});

@@ -1,0 +1,65 @@
+ <!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+           
+         <title>メール認証</title>   
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pt-4 pb-5 nagoyameshi-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xl-5 col-lg-6 col-md-8">  
+                             
+                             <div th:if="${successMessage}" class="alert nagoyameshi-alert-info">
+                                 <span th:text="${successMessage}"></span>
+                             </div> 
+                             
+                             <div th:if="${errorMessage}" class="alert nagoyameshi-alert-danger">
+                                 <span th:text="${errorMessage}"></span>
+                             </div>
+                             
+                             <div th:if="${upgradeSuccessMessage}" class="alert nagoyameshi-alert-info">
+		                         <span th:text="${upgradeSuccessMessage}"></span>
+		                     </div> 
+		                   
+		                     
+		                     <h1 class="mb-3 text-center">有料プランでより便利に！</h1>  
+		                     <p class="justify-content-center">有料プランに登録すると以下の機能・特典を利用できます。</p>
+		                     <p class="justify-content-center">ログイン後、メニュー画面「有料プランに登録する」をクリックください。</p>
+		                     
+		                     <div class="card mb-4">
+								 <div class="card-header text-center" >有料プランの内容</div>
+									 <ul class="list-group list-group-flush">
+										 <li class="list-group-item">・店舗を好きなだけお気に入り登録可能</li>
+										 <li class="list-group-item">・オンライン予約が可能（予約数に達した場合や営業時間外の場合は、店舗から連絡が来ます。）</li>
+										 <li class="list-group-item">・レビューの投稿が可能</li>
+										 <li class="list-group-item">・月額たったの３００円</li>
+									 </ul>
+							 </div>
+							 <div class="form-group mt-5"> 
+										 <form action="/auth/login" method="POST">
+                                         <button type="submit" id="loginButton" class="btn text-white shadow-sm w-100 nagoyameshi-btn">ログインに進む</button>
+                                     	 </form>
+                                     </div>  
+	                                    
+                         </div>
+                         
+                         
+                     </div>
+                 </div>
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+   </body>
+ </html>

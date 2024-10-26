@@ -1,0 +1,43 @@
+package com.example.nagoyameshi.controller;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.nagoyameshi.repository.CategoryRepository;
+
+@Controller
+@RequestMapping("/admin/categories")
+public class AdminCateogryController {
+    private final CategoryRepository categoryRepository;        
+    
+    public AdminCategoryController(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;                
+    }    
+    
+    @GetMapping
+    public String index(@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) 
+    Pageable pageable, Model model) {
+        List<Category> category;
+  
+        
+        model.addAttribute("userPage", userPage);        
+        model.addAttribute("keyword", keyword);                
+        
+        return "admin/users/index";
+    }
+    
+    @GetMapping("/{id}")
+    public String show(@PathVariable(name = "id") Integer id, Model model) {
+        User user = userRepository.getReferenceById(id);
+        
+        model.addAttribute("user", user);
+        
+        return "admin/users/show";
+    }  
+}

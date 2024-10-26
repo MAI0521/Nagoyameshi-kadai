@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+           
+         <title>カテゴリー一覧</title>   
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pt-4 pb-5 nagoyameshi-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xxl-9 col-xl-10 col-lg-11">
+                             
+                             <h1 class="mb-4 text-center">カテゴリー一覧</h1>   
+                         
+                             <div th:if="${successMessage}" class="alert nagoyameshi-alert-info">
+                                 <span th:text="${successMessage}"></span>
+                             </div>   
+                             
+                             <table class="table">
+                                 <thead>
+                                     <tr>
+                                         <th scope="col">ID</th>
+                                         <th scope="col">カテゴリー名</th>
+                                         <th scope="col"></th>
+                                     </tr>
+                                 </thead>   
+                                 <tbody>                                                     
+                                     <tr th:each="category : ${categories}">								                
+						                 <td th:text="${category.id}"></td>
+						                 <td th:text="${category.name}"></td>
+                                         <td>
+								            <span th:if="${category.id < 1 or category.id > 8}">
+								                <a th:href="@{/admin/categories/__${category.getId()}__/edit}">編集</a>
+								            </span>
+								            <span th:if="${category.id >= 1 and category.id <= 8}" class="text-muted">編集不可（※トップページで使用のため※）</span>
+								        </td>                                                                                 
+                                     </tr>                                      
+                                 </tbody>
+                             </table>
+                             <div class="col-md-8">         
+								  <a href="/admin/categories/register" class="btn text-white shadow-sm mb-3 nagoyameshi-btn">カテゴリーを新規登録する</a>                                                      
+                             </div>                                      
+                         </div>
+                     </div>
+                 </div>
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+   </body>
+ </html>

@@ -1,0 +1,152 @@
+package com.example.nagoyameshi.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.nagoyameshi.entity.User;
+import com.example.nagoyameshi.entity.VerificationToken;
+import com.example.nagoyameshi.event.PasswordEventPublisher;
+import com.example.nagoyameshi.event.SignupEventPublisher;
+import com.example.nagoyameshi.form.PasswordResetVerifyForm;
+import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.service.UserService;
+import com.example.nagoyameshi.service.VerificationTokenService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+ @Controller
+public class AuthController {
+     private final UserService userService;  
+     private final SignupEventPublisher signupEventPublisher;
+     private final VerificationTokenService verificationTokenService;
+     private final PasswordEventPublisher passwordEventPublisher;
+     
+     public AuthController(UserService userService, SignupEventPublisher signupEventPublisher, VerificationTokenService verificationTokenService, PasswordEventPublisher passwordEventPublisher) {         
+         this.userService = userService;
+         this.signupEventPublisher = signupEventPublisher;
+         this.verificationTokenService = verificationTokenService;
+         this.passwordEventPublisher = passwordEventPublisher;
+     } 
+	 
+     @GetMapping("/login")
+     public String login() {        
+         return "auth/login";
+     }
+     
+     @GetMapping("/signup")
+     public String signup(Model model) {        
+         model.addAttribute("signupForm", new SignupForm());
+         return "auth/signup";
+     }  
+     
+     @PostMapping("/signup")
+     public String signup(@ModelAttribute @Validated SignupForm signupForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {      
+         // メールアドレスが登録済みであれば、BindingResultオブジェクトにエラー内容を追加する
+         if (userService.isEmailRegistered(signupForm.getEmail())) {
+             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "email", "すでに登録済みのメールアドレスです。");
+             bindingResult.addError(fieldError);                       
+         }    
+         
+         // パスワードとパスワード（確認用）の入力値が一致しなければ、BindingResultオブジェクトにエラー内容を追加する
+         if (!userService.isSamePassword(signupForm.getPassword(), signupForm.getPasswordConfirmation())) {
+             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "password", "パスワードが一致しません。");
+             bindingResult.addError(fieldError);
+         }        
+         
+         if (bindingResult.hasErrors()) {
+             return "auth/signup";
+         }
+         
+         User createdUser = userService.create(signupForm);
+         String requestUrl = new String(httpServletRequest.getRequestURL());
+         signupEventPublisher.publishSignupEvent(createdUser, requestUrl);
+         redirectAttributes.addFlashAttribute("successMessage", "ご入力いただいたメールアドレスに認証メールを送信しました。メールに記載されているリンクをクリックし、パスワードリセットを完了してください。"); 
+ 
+         return "redirect:/";
+     }
+     
+     @GetMapping("/signup/verify")
+     public String verify(@RequestParam(name = "token") String token, Model model) {
+         VerificationToken verificationToken = verificationTokenService.getVerificationToken(token);
+         
+         if (verificationToken != null) {
+             User user = verificationToken.getUser();  
+             userService.enableUser(user);
+             String successMessage = "会員登録が完了しました。";
+             model.addAttribute("successMessage", successMessage);            
+         } else {
+             String errorMessage = "トークンが無効です。";
+             model.addAttribute("errorMessage", errorMessage);
+         }
+         
+         return "auth/verify";         
+     }   
+     
+     @GetMapping("/pwreset")
+     public String pwreset(Model model) {        
+         model.addAttribute("passwordResetVerifyForm", new PasswordResetVerifyForm());
+         return "auth/pwreset";
+     }  
+     
+     @PostMapping("/pwreset")
+     public String pwreset(@ModelAttribute 
+    		 @Validated PasswordResetVerifyForm passwordResetVerifyForm, 
+    		 BindingResult bindingResult, 
+    		 RedirectAttributes redirectAttributes, 
+    		 HttpServletRequest httpServletRequest) {      
+         // メールアドレスが登録済みでなければ、BindingResultオブジェクトにエラー内容を追加する
+         if (userService.isEmailNotRegistered(passwordResetVerifyForm.getEmail())) {
+             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "email", "このメールアドレスはまだ登録されていません。");
+             bindingResult.addError(fieldError);                       
+         }        
+         
+      // パスワードとパスワード（確認用）の入力値が一致しなければ、BindingResultオブジェクトにエラー内容を追加する
+         if (!userService.isSamePassword(signupForm.getPassword(), signupForm.getPasswordConfirmation())) {
+             FieldError fieldError = new FieldError(bindingResult.getObjectName(), "password", "パスワードが一致しません。");
+             bindingResult.addError(fieldError);
+         }   
+         
+         if (bindingResult.hasErrors()) {
+             return "auth/pwreset";
+         }
+         
+         User updatedPassword = userService.updatePw(passwordResetVerifyForm);
+         String requestUrl = new String(httpServletRequest.getRequestURL());
+         passwordEventPublisher.publishPasswordEvent(updatedPassword, requestUrl);
+         redirectAttributes.addFlashAttribute("successMessage", "ご入力いただいたメールアドレスに認証メールを送信しました。メールに記載されているリンクをクリックし、会員登録を完了してください。"); 
+ 
+         return "redirect:/";
+     }
+     
+     @GetMapping("/pwreset/verify")
+     public String pwVerify(@RequestParam(name = "token") String token, 
+    		 BindingResult bindingResult, 
+    		 RedirectAttributes redirectAttributes, 
+    		 HttpServletRequest httpServletRequest,
+    		 Model model) {
+         VerificationToken verificationToken = verificationTokenService.getVerificationToken(token);
+
+         if (verificationToken == null) {
+             String errorMessage = "トークンが無効です。";
+             model.addAttribute("errorMessage", errorMessage);
+             return "auth/pwreset"; // Early return if token is invalid
+         }
+         
+         User user = verificationToken.getUser();
+         
+         String successMessage = "パスワードを更新しました。";
+         model.addAttribute("successMessage", successMessage);
+         
+         return "auth/verify";
+     }
+     
+    
+}

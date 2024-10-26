@@ -1,0 +1,29 @@
+package com.example.nagoyameshi.controller;
+
+ import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.form.RestaurantEditForm;
+import com.example.nagoyameshi.form.RestaurantRegisterForm;
+import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.service.RestaurantService;
+
+ @Controller
+public class HomeController {
+	 private final RestaurantService restaurantService;
+
+    public HomeController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
+    }
+	    
+     @GetMapping("/")
+     public String index() {
+    	 List<Restaurant> newRestaurants = restaurantService.findTop8restaurantsByOrderByCreatedAtDesc();
+         List<Restaurant> popularRestaurants = restaurantService.findTop3restaurantsByOrderByReservationCountDesc()
+         return "index";
+     }   
+}
+

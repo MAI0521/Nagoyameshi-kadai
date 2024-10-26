@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>レビュー一覧</title>
+    <div th:replace="~{fragment :: meta}"></div>
+    <div th:replace="~{fragment :: styles}"></div>
+</head>
+<body>
+    <div class="samuraitravel-wrapper">
+        <!-- ヘッダー -->
+        <div th:replace="~{fragment :: header}"></div>
+
+        <main>
+            <div class="container samuraitravel-container pb-5">
+                <div class="row justify-content-center">
+                    <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/houses/{id}(id=${house.id})}">民宿詳細</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
+                        </ol>
+                    </nav>
+                    
+                    <div class="reviewbox-container mt-4 w-100">
+                        <div class="review-box mb-3" th:each="review : ${review}">
+                            <p><strong th:text="${review.user.name}"></strong></p>
+                            <p>
+                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                      th:if="${i <= review.starId}"
+                                      class="star"
+                                      th:text="'★'"></span>
+                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                      th:if="${i > review.starId}"
+                                      class="star"
+                                      th:text="'☆'"></span>
+                            </p>
+                            <p><small th:text="${#dates.format(review.createdAt, 'yyyy年M月d日')}"></small></p>
+                            <p><span th:text="${review.comment}"></span></p>
+                        </div>
+                    </div>
+                      <!-- Pagination (Optional, if you have pagination in the backend) -->
+                    	<div th:if="${reviewPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                 <nav aria-label="レビュー一覧ページ">
+                                     <ul class="pagination">
+                                         <li class="page-item">
+                                             <a th:unless="${reviewPage.isFirst()}" th:href="@{reviews(page = ${reviewPage.number - 1})}" class="page-link">前</a>
+                                         </li>
+                                         <li th:each="i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class="page-item">
+                                             <span th:if="${i == reviewPage.number}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+                                             <a th:unless="${i == reviewPage.number}" th:href="@{reviews(page = ${i})}" class="page-link" th:text="${i + 1}"></a>
+                                         </li>
+                                         <li class="page-item">                        
+                                             <span th:if="${reviewPage.isLast()}" class="page-link disabled">次</span>
+                                             <a th:unless="${reviewPage.isLast()}" th:href="@{reviews(page = ${reviewPage.number + 1})}"  class="page-link">次</a>
+                                         </li>
+                                     </ul>
+                                 </nav> 
+                         </div>
+
+                </div>
+            </div>
+        </main>
+        
+        <!-- フッター -->
+        <div th:replace="~{fragment :: footer}"></div>
+    </div>
+
+    <div th:replace="~{fragment :: scripts}"></div>
+</body>
+</html>

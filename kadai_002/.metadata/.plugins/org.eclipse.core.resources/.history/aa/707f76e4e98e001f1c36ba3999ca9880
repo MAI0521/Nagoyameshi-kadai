@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <div th:replace="~{fragment :: meta}"></div>
+
+        <div th:replace="~{fragment :: styles}"></div>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+
+        <!-- Swiper -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+
+        <title>Nagoyameshi</title>
+    </head>
+    <body>
+        <div class="nagoyameshi-wrapper">
+           <div th:replace="~{fragment :: header}"></div>
+
+            <main>
+                <div>
+                    <div class="swiper nagoyameshi-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide"><img th:src="@{/images/main1.jpg}"></div>
+                            <div class="swiper-slide"><img th:src="@{/images/main2.jpg}"></div>
+                            <div class="swiper-slide"><img th:src="@{/images/main3.jpg}"></div>
+                            <div class="swiper-slide"><img th:src="@{/images/main4.jpg}"></div>
+                            <div class="swiper-slide"><img th:src="@{/images/main5.jpg}"></div>
+                            <div class="d-flex align-items-center nagoyameshi-overlay-background">
+                                <div class="container nagoyameshi-container nagoyameshi-overlay-text">
+                                    <h1 class="text-white nagoyameshi-catchphrase-heading">グルメのまち、名古屋へようこそ</h1>
+                                    <p class="text-white nagoyameshi-catchphrase-paragraph">Nagoyameshiは、名古屋グルメを紹介するサイトです。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${param.loggedIn}" class="container nagoyameshi-container pt-2">
+                    <div class="alert nagoyameshi-alert-info mt-4 mb-0">
+                        ログインしました。
+                    </div>
+                </div>
+
+
+                <div th:if="${param.loggedOut}" class="container nagoyameshi-container pt-2">
+                    <div class="alert nagoyameshi-alert-info mt-4 mb-0">
+                        ログアウトしました。
+                    </div>
+                </div>
+
+                <div th:if="${successMessage}" class="container nagoyameshi-container pt-2">
+                    <div class="alert nagoyameshi-alert-info mt-4 mb-0">
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                </div>
+
+                <div class="border-bottom mb-4 py-4">
+                    <div class="container nagoyameshi-container my-2">
+                        <form method="get" th:action="@{/restaurants}">
+	                         <div class="input-group">
+	                             <input type="text" class="form-control" name="keywords" th:value="${keywords}" placeholder="店舗名・キーワード">
+	                             <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+	                         </div>               
+	                     </form>
+                    </div>
+                </div>
+                <div class="container nagoyameshi-container">
+					
+			    	<div class="row justify-content-center pt-2">
+						<div class="text-center">
+				        	<h2 class="mb-3">カテゴリから探す</h2>
+			        	</div>
+				        <div class="row row-cols-xl-8 row-cols-md-4 row-cols-2 g-3 mb-3">
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=1)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">みそかつ</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=2)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">ひつまぶし</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=3)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">手羽先</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=4)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">味噌おでん</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=5)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">うどん</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=6)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">モーニング</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=7)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">ナポリタン</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				            <div class="col">
+				                <!-- Corrected form tag -->
+				                <a th:href="@{/restaurants(category=8)}" class="card-link">
+				                    <div class="card text-white">
+				                        <!-- Add valid image source or Thymeleaf dynamic path -->
+				                        <img th:src="@{/storage/misokatsu9.jpg}" class="card-img vertical-card-image" alt="みそかつ">
+				                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+				                            <h3 class="card-title category-name">その他</h3>
+				                        </div>
+				                    </div>
+				                </a>
+				            </div>
+				        </div>
+					</div>
+                </div>
+                
+            </main>
+
+            <div th:replace="~{fragment :: footer}"></div>
+        </div>
+
+        <div th:replace="~{fragment :: scripts}"></div>
+
+        <!-- Swiper -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+        <script th:src="@{/js/carousel.js}"></script>
+    </body>
+</html>

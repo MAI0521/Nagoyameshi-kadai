@@ -1,0 +1,52 @@
+package com.example.samuraitravel.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.entity.Review;
+import com.example.samuraitravel.entity.User;
+import com.example.samuraitravel.form.ReviewForm;
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReviewRepository;
+import com.example.samuraitravel.repository.UserRepository;
+
+ 
+
+@Service
+public class ReviewService {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+    private final HouseRepository houseRepository;  
+    private final UserRepository userRepository; 
+    
+    public ReviewService(ReviewRepository reservationRepository, HouseRepository houseRepository, UserRepository userRepository) {
+        this.reviewRepository = reviewRepository;  
+        this.houseRepository = houseRepository;  
+        this.userRepository = userRepository;  
+    }  
+
+    public Page<Review> getReviewsForHouse(House house, int page, int size) {
+        return reviewRepository.findByHouseOrderByCreatedAtDesc(house, PageRequest.of(page, size));
+    }
+    
+    @Transactional
+    public Review create(ReviewForm reviewForm) {
+    	Review review = new Review();
+    	House house = houseRepository.getReferenceById(reviewForm.getHouse());
+    	User user = userRepository.getReferenceById(reviewForm.getUser());
+    	
+        
+        review.setHouse(house);
+        review.setUser(user);
+        review.setStarId(reviewForm.getStarId());
+        review.setComment(reviewForm.getComment());
+
+      
+        return reviewRepository.save(review);
+    }  
+}

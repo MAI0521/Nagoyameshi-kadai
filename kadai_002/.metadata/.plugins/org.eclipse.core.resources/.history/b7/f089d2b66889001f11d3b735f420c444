@@ -1,0 +1,27 @@
+const stripe = Stripe('pk_test_51Q9M36G1Q8EB8XUa1JzgsvmXZCtUyDFLeJozJOM78A4gjNbfUNZ3ITbwn0gQOjvCoQYnDxYzPdI2oSpjtQqZsnlp00N7ic3SNK');
+
+const subscribeButton = document.querySelector('#subscribeButton');
+
+subscribeButton.addEventListener('click', async (event) => {
+    event.preventDefault(); // Prevent the form from submitting the traditional way
+    
+    const response = await fetch('/user/create-checkout-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            priceId: 'price_1Q9M36G1Q8EB8XUa1JzgsvmXZCtUyDFLeJozJOM78A4gjNbfUNZ3ITbwn0gQOjvCoQYnDxYzPdI2oSpjtQqZsnlp00N7ic3SNK' // Pass price ID or other necessary data
+        })
+    });
+
+    const { sessionId } = await response.json(); // Get sessionId from server response
+
+    const result = await stripe.redirectToCheckout({
+        sessionId: sessionId
+    });
+
+    if (result.error) {
+        alert(result.error.message);
+    }
+});

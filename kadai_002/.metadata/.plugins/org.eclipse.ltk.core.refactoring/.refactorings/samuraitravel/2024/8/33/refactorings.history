@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;fragment.html&apos; to &apos;index.html&apos;&#x0D;&#x0A;- 元のプロジェクト: &apos;samuraitravel&apos;&#x0D;&#x0A;- 宛先要素: &apos;index.html&apos;&#x0D;&#x0A;- オリジナル要素: &apos;fragment.html&apos;&#x0D;&#x0A;- リファクタリングされた要素の参照を更新" description="ファイルを移動する" element1="src/main/resources/templates/admin/fragment.html" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1723903663024" target="src/main/resources/templates/index.html" units="0" version="1.0"/>
+</session>

@@ -1,0 +1,373 @@
+ html {
+   font-size: 14px;
+ }
+ 
+ body {
+   font-family: 'Noto Sans JP', sans-serif;  
+ }
+ 
+ .card {
+    height: 200px; /* Adjust to your preferred height */
+}
+
+.card-img {
+    width: 100%; /* Make the image take the full width of the card */
+    height: 100%; /* Make the image take the full height of the card */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire card */
+}
+ 
+ h1 {
+   font-size: 1.5rem;
+ }
+ 
+ h2 {
+   font-size: 1.475rem;
+ }
+ 
+  h3 {
+   font-size: 1.25rem;
+ }
+
+ 
+ a {
+   color:  #228B22;
+   text-decoration: none !important;
+ }
+ 
+ a:hover {
+     color: #B2AC88;
+ }
+ 
+ footer {
+   width: 100%;
+   height: 60px;
+   position: absolute;
+   bottom: 0;    
+   background-color:  #925626;
+ }
+ 
+ .nagoyameshi-alert-info {
+   background-color: #B6D7AB; 
+   color: #001D00;
+   border: #001D00;
+   padding: 1rem;
+   border-radius: 5px;
+ }
+ 
+  .nagoyameshi-wrapper {
+   min-height: 100vh;
+   position: relative;
+   padding-bottom: 60px;
+   box-sizing: border-box;
+ }
+ 
+  .nagoyameshi-pre-wrap {
+   /* 改行文字で行を折り返す */
+   white-space: pre-wrap;
+ }
+ 
+  .nagoyameshi-link-danger {
+     color: #6B4C4C;
+ }
+ 
+ .nagoyameshi-link-danger:hover {
+     color: #9F8080;
+ }
+ 
+ .nagoyameshi-btn-danger {
+     background-color: #6B4C4C !important;
+     transition: 0.1s;
+ }
+ 
+ .nagoyameshi-btn-danger:hover {
+   opacity: 0.8;   
+ }
+ 
+ 
+ .nagoyameshi-navbar {
+   min-height: 60px;
+   background-color: #925626 !important;
+ }
+ 
+ .nagoyameshi-image {
+	width: 470px;
+	height: 350px;
+	overflow: hidden;
+ }
+ 
+  .nagoyameshi-imagecrop {
+	width: 100%;
+	height: 100%;
+	overflow: cover;
+ }
+ 
+ 
+ .nagoyameshi-logo {
+   height: 55px;  
+ }
+ 
+ .nagoyameshi-btn {
+   background-color: #6C4F3D !important;  
+   color: #E9E1D6 !important; 
+   transition: 0.1s;
+ }
+ 
+ .nagoyameshi-btn:hover {
+   opacity: 0.8;   
+ }
+ 
+ .nagoyameshi-container {
+/*    display: flex;*/
+/*    flex-flow: wrap;*/
+    padding: 0px;
+    box-sizing: border-box;
+
+}
+ 
+ .nagoyameshi-page-link {
+   color: #925626;
+ }
+ 
+ .nagoyameshi-page-link:hover {
+   color: #D9B77B;
+ }
+ 
+ .nagoyameshi-active {
+   background-color: #6C4F3D !important;
+   border-color: #6C4F3D !important;
+ }
+ 
+ .nagoyameshi-sort-box {
+   width: 150px;
+ }
+ 
+ .nagoyameshi-search-form {
+     max-width: 300px;
+ }
+ 
+  .nagoyameshi-dropdown {
+   padding-bottom: 20px;
+ }
+ 
+ .nagoyameshi-dropdown-item:active {
+   background-color: #5196a6;
+ }
+ 
+   .nagoyameshi-dropdown-text {
+    color: white;
+    margin-right: 15px;
+ }
+ 
+  .nagoyameshi-card-link {
+   transition: 0.3s;
+ }
+ 
+ .nagoyameshi-card-link:hover {
+   opacity: 0.7;
+ }
+ 
+ .nagoyameshi-horizontal-card-image {
+   width: 100%;
+   height: 240px;
+   object-fit: cover;
+ }
+ 
+  .favorite {
+	 color: #407471;
+	 font-size: small;
+	 display: flex;
+	 justify-content: flex-end;
+ }
+ 
+ .form-select {
+    font-size: 1rem; /* Adjust as needed */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+.form-select option {
+    font-family: Arial, sans-serif; /* Adjust as needed */
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.form-select-nagoyameshi {
+    font-size: 1rem; /* Adjust as needed */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100%;
+    position: relative; /* For custom arrow positioning */
+/*    appearance: none;  Remove default arrow */
+}
+
+/* Optional: Style dropdown to ensure star icons are aligned */
+.form-select-nagoyameshi option {
+    display: flex;
+    align-items: center;
+}
+ 
+  .bg-brown {
+   background-color: #925626 !important;
+ }
+ 
+  .custom-checkbox {
+    display: inline-block;
+    width: 20px;  /* Width of the custom checkbox */
+    height: 20px; /* Height of the custom checkbox */
+    border: 2px solid rgb(0, 0, 0); /* Border color */
+    border-radius: 3px; /* Rounded corners */
+    position: relative;
+    cursor: pointer; /* Pointer cursor on hover */
+    margin-top: 5px;
+    margin-left: 10px; /* Space between label and checkbox */
+	}
+        
+  .custom-checkbox::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 12px;
+    height: 12px;
+    background-color: transparent;
+    border-radius: 2px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Transition for smooth effect */
+	}
+	
+	
+  .text-brown {
+   color: #E9E1D6 !important;
+  }
+  
+  .custom-color {
+    color: dimgray; 
+}
+
+ .rating {
+    display: flex;
+    direction: row-reverse;
+    justify-content: center;
+    font-size: 2rem;
+}
+.rating input {
+    display: none;
+}
+.rating label {
+    color: #ddd;
+    cursor: pointer;
+}
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input:checked ~ label {
+    color: #ffcc00;
+}
+ 
+ 
+ .reviewbox-container {
+    display: flex;
+    flex-flow: wrap;
+    padding: 0px;
+    box-sizing: border-box;
+
+}
+ .review-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0px 10px;
+    border-radius: 5px;
+    flex: 0 0 47%;
+    height: 175px;
+    box-sizing: border-box;
+    word-wrap: break-word; /* Ensures long words are broken */
+    overflow-wrap: break-word;
+    overflow: auto; 
+}
+.star {
+    color: gold;
+}
+
+.box {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    padding: 0px;
+}
+.edit-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.faint-image {
+/*    filter: grayscale(100%);  Full grayscale */
+    opacity: 0.7;            /* Adjust the opacity to make it faint */
+}
+
+ .nagoyameshi-swiper {
+   width: 100%;
+   height: 480px;
+ }
+ 
+ .nagoyameshi-swiper img {
+   width: 100%;
+   height: 480px;
+   object-fit: cover;
+ }
+ 
+ .nagoyameshi-overlay-background {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 10;
+ }
+ 
+ .nagoyameshi-overlay-text {
+   padding: 0 70px;
+ }
+ 
+ .nagoyameshi-catchphrase-heading {
+   font-size: 36px;
+   line-height: 1.5;
+   font-family: 'Noto Serif JP', serif;
+   font-weight: 600;
+   text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+ }
+ 
+ .nagoyameshi-catchphrase-paragraph {
+   font-size: 16px;
+   line-height: 2;
+   font-family: 'Noto Serif JP', serif;
+   font-weight: 400;
+   text-shadow: 0.25rem 0.25rem 1rem rgb(0 0 0 / 60%);
+ }
+ 
+ .nagoyameshi-accordion-body:hover {
+   background-color: #f8f9fa;
+ }
+ 
+ .nagoyameshi-accordion-body:active {
+   background-color: #5196a6;
+   color: #ffffff;
+ }
+ 
+ .nagoyameshi-vertical-card-image {
+    width: 100%; /* Full width of the card */
+    height: 300px; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the card area */
+}
+
+ .nagoyameshi-vertical-card-image-small {
+    width: 100%; /* Full width of the card */
+    height: 200px; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the card area */
+}
+
+ 
+  @media screen and (min-width: 1400px) {
+ .nagoyameshi-container {
+   max-width: 1200px;
+ }
+}

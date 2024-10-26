@@ -1,0 +1,40 @@
+const stripe = Stripe('pk_test_51Q9M36G1Q8EB8XUa1JzgsvmXZCtUyDFLeJozJOM78A4gjNbfUNZ3ITbwn0gQOjvCoQYnDxYzPdI2oSpjtQqZsnlp00N7ic3SNK');
+
+const subscribeButton = document.querySelector('#subscribeButton');
+const csrfToken = document.querySelector('input[name="${_csrf.parameterName}"]').value; // Ensure you're getting the CSRF token correctly
+
+subscribeButton.addEventListener('click', async (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    // Make a POST request to create a checkout session
+    const response = await fetch('/user/create-checkout-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken // Include CSRF token if needed
+        },
+        body: JSON.stringify({
+            priceId: 'price_1Q9M3bG1Q8EB8XUacUbkFtmb' // Adjust as needed
+        })
+    });
+
+    // Check if the response is ok
+    if (!response.ok) {
+        const error = await response.text(); // Get error response
+        console.error('Error:', error); // Log error
+        alert('Failed to create checkout session: ' + error);
+        return;
+    }
+
+    // Parse the response to get the sessionId
+    const { sessionId } = await response.json(); // Get sessionId from server response
+
+    // Redirect to Stripe Checkout with the sessionId
+    const result = await stripe.redirectToCheckout({ sessionId });
+
+    // Handle any errors from the redirect
+    if (result.error) {
+        console.error("Error:", result.error);
+        alert('Error redirecting to checkout: ' + result.error.message);
+    }
+});

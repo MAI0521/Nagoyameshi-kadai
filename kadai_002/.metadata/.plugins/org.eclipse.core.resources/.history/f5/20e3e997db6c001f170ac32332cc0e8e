@@ -1,0 +1,62 @@
+package com.example.samuraitravel.service;
+
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.samuraitravel.entity.Review;
+import com.example.samuraitravel.repository.HouseRepository;
+import com.example.samuraitravel.repository.ReviewRepository;
+import com.example.samuraitravel.repository.UserRepository;
+ 
+ @Service
+public class ReviewService {private final ReviewRepository reviewRepository;  
+private final HouseRepository houseRepository;  
+private final UserRepository userRepository;  
+
+public ReviewService(ReviewRepository reviewRepository, HouseRepository houseRepository, UserRepository userRepository) {
+    this.ewviewRepository = reviewRepository;  
+    this.houseRepository = houseRepository;  
+    this.userRepository = userRepository;  
+}    
+
+@Transactional
+public void create(ReviewRegisterForm reviewRegisterForm) {
+    Review review = new Review();        
+    MultipartFile imageFile = houseRegisterForm.getImageFile();
+    
+    if (!imageFile.isEmpty()) {
+        String imageName = imageFile.getOriginalFilename(); 
+        String hashedImageName = generateNewFileName(imageName);
+        Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
+        copyImageFile(imageFile, filePath);
+        house.setImageName(hashedImageName);
+    }
+    
+    house.setName(houseRegisterForm.getName());                
+    house.setDescription(houseRegisterForm.getDescription());
+    house.setPrice(houseRegisterForm.getPrice());
+    house.setCapacity(houseRegisterForm.getCapacity());
+    house.setPostalCode(houseRegisterForm.getPostalCode());
+    house.setAddress(houseRegisterForm.getAddress());
+    house.setPhoneNumber(houseRegisterForm.getPhoneNumber());
+                
+    houseRepository.save(house);
+}    
+
+// 宿泊人数が定員以下かどうかをチェックする
+public boolean isWithinCapacity(Integer numberOfPeople, Integer capacity) {
+    return numberOfPeople <= capacity;
+}
+
+// 宿泊料金を計算する
+public Integer calculateAmount(LocalDate checkinDate, LocalDate checkoutDate, Integer price) {
+    long numberOfNights = ChronoUnit.DAYS.between(checkinDate, checkoutDate);
+    int amount = price * (int)numberOfNights;
+    return amount;
+}    
+}

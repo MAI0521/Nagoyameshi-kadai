@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+           
+         <title>レビュー一覧</title>   
+     </head>
+     <body>
+         <div class="samuraitravel-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container samuraitravel-container pb-5">
+                     <div class="row justify-content-center">
+                         <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                             <ol class="breadcrumb mb-0">                        
+                                 <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                                 <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
+                                 <li class="breadcrumb-item"><a th:href="@{/houses/__${house.getId()}__}">民宿詳細</a></li>
+                                 <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
+                             </ol>
+                         </nav>         
+                        	<div class="reviewbox-container mt-4 w-100">
+		                        <div class="review-box mb-3" th:each="review : ${review}">
+		                            <p><strong th:text="${review.user.name}"></strong></p>
+		                          <!-- User name -->
+		                            <p>
+		                            	<span th:each="i : ${#numbers.sequence(1, 5)}"
+							                  th:if="${i <= review.starId}"
+							                  class="star"
+							                  th:text="'★'"></span>
+							            <span th:each="i : ${#numbers.sequence(1, 5)}"
+							                  th:if="${i > review.starId}"
+							                  class="star"
+							                  th:text="'☆'"></span>
+							        </p>
+		                            <p><small th:text="${#dates.format(review.createdAt, 'yyyy年M月d日')}"></small></p> 
+  		                            <p><span th:text="${review.comment}"></span></p>    
+	                        	</div>
+	                    
+                                 <a th:href="@{/reviews/index}" class="row justify-content-center w-100 samuraitravel-review-link">すべてのレビューを見る</a>
+                				
+                			</div>
+                                         
+                         </div>
+             
+                         <div class="col">                                                                            
+                                                                         
+                             <div class="mb-3" th:each="house : ${housePage}">
+                                 <a th:href="@{/houses/__${house.getId()}__}" class="link-dark samuraitravel-card-link">
+                                     <div class="card h-100">   
+                                         <div class="row g-0">
+                                             <div class="col-md-4">                                                                                
+                                                 <img th:if="${house.getImageName()}" th:src="@{/storage/__${house.getImageName()}__}" class="card-img-top samuraitravel-horizontal-card-image" alt="店舗画像">                                                     
+                                                 <img th:unless="${house.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top samuraitravel-horizontal-card-image" alt="NO IMAGE">                                                    
+                                             </div> 
+                                             <div class="col-md-8">                                                                                                                        
+                                                 <div class="card-body">                                    
+                                                     <h3 class="card-title mb-3" th:text="${house.getName()}"></h3>                                            
+  
+                                                     <hr class="mb-3">
+                                                     
+                                                     <p class="card-text mb-2">
+                                                         <span th:text="${house.getDescription()}"></span>
+                                                     </p>                                                    
+                                                     
+                                                     <p class="card-text mb-2">
+                                                         <small class="text-muted" th:text="${'〒' + house.getPostalCode()}"></small>
+                                                         <small class="text-muted" th:text="${house.getAddress()}"></small>                                                      
+                                                     </p>   
+                                                                                                                                                                                                                                    
+                                                     <p class="card-text">
+                                                         <span th:text="${#numbers.formatInteger(house.getPrice(), 1, 'COMMA') + '円 / 泊'}"></span>
+                                                     </p>                                    
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>    
+                                 </a>            
+                             </div>                                                                                       
+             
+                             <!-- ページネーション -->
+                             <div th:if="${housePage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                 <nav aria-label="民宿一覧ページ">
+                                     <ul class="pagination">
+                                         <li class="page-item">
+                                             <a th:unless="${housePage.isFirst()}" th:href="@{/houses(page = ${housePage.getNumber() - 1}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link samuraitravel-page-link">前</a>
+                                         </li>
+                                         <li th:each="i : ${#numbers.sequence(0, housePage.getTotalPages() - 1)}" class="page-item">
+                                             <span th:if="${i == housePage.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+                                             <a th:unless="${i == housePage.getNumber()}" th:href="@{/houses(page = ${i}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
+                                         </li>
+                                         <li class="page-item">                        
+                                             <span th:if="${housePage.isLast()}" class="page-link disabled">次</span>
+                                             <a th:unless="${housePage.isLast()}" th:href="@{/houses(page = ${housePage.getNumber() + 1}, keyword = ${keyword}, area = ${area}, price = ${price}, order = ${order})}" class="page-link samuraitravel-page-link">次</a>
+                                         </li>
+                                     </ul>
+                                 </nav> 
+                             </div>                                      
+                         </div>
+                     </div>
+                 </div>  
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+   </body>
+ </html>

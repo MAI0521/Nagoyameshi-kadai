@@ -1,0 +1,201 @@
+ <!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+           
+         <title>店舗一覧</title>   
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container nagoyameshi-container pb-5">
+                     <div class="row justify-content-center">
+                         <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                             <ol class="breadcrumb mb-0">                        
+                                 <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                                 <li class="breadcrumb-item active" aria-current="page">店舗一覧</li>
+                             </ol>
+                         </nav>         
+             
+                         <div class="col-xl-3 col-lg-4 col-md-12">               
+                             <form method="get" th:action="@{/restaurants}" class="w-100 mb-3">
+                                 <div class="input-group">
+                                     <input type="text" class="form-control" name="keywords" th:value="${keywords}" placeholder="店舗名・キーワード">
+<!--                                     <input type="hidden" name="budgetRange" th:value="${budgetRange}"/>-->
+<!--                                     <input type="hidden" name="category" th:value="${category.id}"/>-->
+                                     <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+                                 </div>               
+                             </form>
+                             
+                             <div class="card mb-3">
+                                 <div class="card-header">
+                                     カテゴリーで絞り込む
+                                 </div>
+                                 <div class="card-body">
+                                     <form method="get" th:action="@{/restaurants}" class="w-100">
+                                         <div class="form-group mb-3">    
+                                             <select id="categorySelect" name="category" th:value="*{categories}" class="form-control form-select">
+                                                 <option value="">すべてのカテゴリー</option>
+											        <option th:each="category : ${categories}" 								                
+											                th:value="${category.id}"
+											                th:selected="${category.id} == ${selectedCategoryId}"
+											                th:text="${category.name}"></option>
+			                                  </select>                                                                                
+                                         </div>
+<!--                                         <input type="hidden" name="keywords" th:value="${keywords}"/>-->
+<!--                                         <input type="hidden" name="budgetRange" th:value="${budgetRange}"/>-->
+                                         <div class="form-group">
+                                             <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">検索</button>
+                                     	 </div>                                           
+                                     </form>
+                                 </div>
+                             </div>
+                                   
+             
+                             <div class="card mb-3">
+                                 <div class="card-header">
+                                     予算から探す
+                                 </div>
+                                 <div class="card-body">
+                                     <form method="get" th:action="@{/restaurants}" class="w-100">
+                                         <div class="form-group mb-3">    
+                                             <select class="form-control form-select" name="budgetRange">
+                                                 <option value="" >選択してください</option> 
+                                                 <option value="1" th:selected="${budgetRange == 1}" >1000円以下</option>
+		                                         <option value="2" th:selected="${budgetRange == 2}" >1000～2500円</option>
+		                                         <option value="3" th:selected="${budgetRange == 3}" >2500～4000円</option>
+		                                         <option value="4" th:selected="${budgetRange == 4}" >4000～5000円</option>
+		                                         <option value="5" th:selected="${budgetRange == 5}" >5000円以上</option>
+                                             </select>                                                                                
+                                         </div>
+<!--                                         <input type="hidden" name="keywords" th:value="${keywords}"/>-->
+<!--                                         <input type="hidden" name="category" th:value="${category.id}"/>-->
+                                         <div class="form-group">
+                                             <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">検索</button>
+                                         </div>                                           
+                                     </form>
+                                 </div>
+                             </div> 
+                         </div>     
+             
+                         <div class="col">                                                                          
+                             <div class="d-flex justify-content-between flex-wrap">                                
+                                 <p th:if="${restaurantPage.getTotalPages() > 1}" class="fs-5 mb-3 text-muted small" th:text="${'検索結果：' + restaurantPage.getTotalElements() + '件' + '（' + (restaurantPage.getNumber() + 1) + ' / ' + restaurantPage.getTotalPages() + ' ページ）'}"></p> 
+                                 <p th:unless="${restaurantPage.getTotalPages() > 1}" class="fs-5 mb-3 text-muted small" th:text="${'検索結果：' + restaurantPage.getTotalElements() + '件'}"></p>                                 
+                             	 <form method="GET" th:action="@{/restaurants}" class="mb-3 nagoyameshi-sort-box"> 
+                                     <input th:if="${keywords}" type="hidden" name="keywords" th:value="${keywords}">
+                                     <input th:if="${selectedCategoryId != null}" type="hidden" name="category" th:value="${selectedCategoryId}">
+                                     <input th:if="${budgetRange != null}" type="hidden" name="budgetRange" th:value="${budgetRange}">  
+<!--                                     <input th:if="${reviewCounts != null}" type="hidden" name="reviewCounts" th:value="${reviewCounts}">                              -->
+                                     <select class="form-select form-select-sm" name="order" onChange="this.form.submit();">
+                                         <option value="createdAtDesc" th:selected="${order == 'createdAtDesc'}">新着順</option>
+                                         <option value="budgetRangeAsc" th:selected="${order == 'budgetRangeAsc'}">予算が安い順</option>                                            
+                                         <option value="budgetRangeDesc" th:selected="${order == 'budgetRangeDesc'}">予算が高い順</option>
+                                         <option value="reviewCountDesc" th:selected="${order == 'reviewCountDesc'}">評価数が多い順</option>
+            							 <option value="averageScoreDesc" th:selected="${order == 'averageScoreDesc'}">平均評価が高い順</option>
+                                     </select>   
+                                 </form>   
+                             
+                             
+                             
+                             </div>   
+                                                                         
+                             <div class="mb-3" th:each="restaurant : ${restaurantPage}">
+                                 <a th:href="@{/restaurants/__${restaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
+                                     <div class="card h-100">   
+                                         <div class="row g-0">
+                                             <div class="col-md-4">                                                                                
+                                                 <img th:if="${restaurant.getImageName()}" th:src="@{/storage/__${restaurant.getImageName()}__}" class="card-img-top nagoyameshi-horizontal-card-image" alt="店舗画像">                                                     
+                                                 <img th:unless="${restaurant.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top nagoyameshi-horizontal-card-image" alt="NO IMAGE">                                                    
+                                             </div> 
+                                             <div class="col-md-8">                                                                                                                        
+                                                 <div class="card-body">                                    
+                                                     <h3 class="card-title mb-3" th:text="${restaurant.getVenueName()}"></h3>                                            
+  
+                                                     <hr class="mb-3">
+                                                     
+                                                     <p class="card-text mb-2">
+                                                         <span th:text="${restaurant.getDescription()}"></span>
+                                                     </p>                                                    
+                                                     
+                                                     <p class="card-text mb-2">
+                                                         <small class="text-muted" th:text="${'〒' + restaurant.getPostalCode()}"></small>
+                                                         <small class="text-muted" th:text="${restaurant.getAddress()}"></small>                                                      
+                                                     </p>   
+                                                                                                                                                                                                                                    
+                                                     <p class="card-text">
+                                                         <span th:if="${restaurant.getBudgetRange()} == 1" th:text="1000円以下"></span>
+				                                         <span th:if="${restaurant.getBudgetRange()} == 2" th:text="1000～2500円"></span>
+				                                         <span th:if="${restaurant.getBudgetRange()} == 3" th:text="2500～4000円"></span>
+				                                         <span th:if="${restaurant.getBudgetRange()} == 4" th:text="4000～5000円"></span>
+				                                         <span th:if="${restaurant.getBudgetRange()} == 5" th:text="5000円以上"></span>
+                                                     </p>  
+                                                     <p class="card-text"> 
+														 	<span th:each="averageReview : ${averageReviews}" >
+														        <span th:if="${averageReview[0] == restaurant.id}">
+																	<span th:if="${averageReview[1] != null}">
+																		<span th:each="i : ${#numbers.sequence(1.0, 5.0)}"
+															                  th:if="${i <= averageReview[1]}"
+															                  class="star"
+															                  th:text="'★'"></span>
+															            <span th:each="i : ${#numbers.sequence(1.0, 5.0)}"
+															                  th:if="${i > averageReview[1]}"
+															                  class="star half"
+												                  			  th:text="'☆'"></span>
+											                  			<span th:if="${averageReview[1] == 0}" th:text="0"></span>
+														            	<span th:if="${averageReview[1] != 0}" th:text="${#numbers.formatDecimal(averageReview[1], 1, 1)}"></span>
+														        	</span>
+														    	</span>
+															</span>
+														 
+														    <span th:each="reviewCount : ${reviewCounts}" >
+														        <span th:if="${reviewCount[0] == restaurant.id}">
+																	<span th:if="${reviewCount[1] != null}">
+														            	<span th:text="'(' + ${reviewCount[1]} + '件)'"></span>
+														        	</span>
+														    	</span>
+															</span>
+													 </p>		
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>    
+                                 </a>            
+                             </div>                                                                                       
+             
+                             <!-- ページネーション -->
+                             <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                 <nav aria-label="店舗一覧ページ">
+                                     <ul class="pagination">
+                                         <li class="page-item">
+                                             <span th:if="${restaurantPage.isFirst()}" class="page-link disabled">前</span>
+                                             <a th:unless="${restaurantPage.isFirst()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() - 1}, keywords = ${keywords}, category = ${selectedCategoryId}, budgetRange = ${budgetRange}, order = ${order})}" class="page-link nagoyameshi-page-link">前</a>
+                                         </li>
+                                         <li th:each="i : ${#numbers.sequence(0, restaurantPage.getTotalPages() - 1)}" class="page-item">
+                                             <span th:if="${i == restaurantPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
+                                             <a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/restaurants(page = ${i}, keywords = ${keywords}, category = ${selectedCategoryId}, budgetRange = ${budgetRange}, order = ${order})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+                                         </li>
+                                         <li class="page-item">                        
+                                             <span th:if="${restaurantPage.isLast()}" class="page-link disabled">次</span>
+                                             <a th:unless="${restaurantPage.isLast()}" th:href="@{/restaurants(page = ${restaurantPage.getNumber() + 1}, keywords = ${keywords}, category = ${selectedCategoryId}, budgetRange = ${budgetRange}, order = ${order})}" class="page-link nagoyameshi-page-link">次</a>
+                                         </li>
+                                     </ul>
+                                 </nav> 
+                             </div>                                      
+                         </div>
+                     </div>
+                 </div>  
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+   </body>
+ </html>
