@@ -4,7 +4,7 @@
          <div th:replace="~{fragment :: meta}"></div>   
               
          <div th:replace="~{fragment :: styles}"></div>
-           
+         <script src="https://js.stripe.com/v3/"></script> 
          <title>会員情報</title>   
      </head>
      <body>
@@ -97,6 +97,24 @@
                                  </div>
 <!--                                 <form method="get" th:action="@{/user/downgrade}">-->
                                  <div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_PAID')">
+									<div class="col-4">
+                                         <span class="fw-bold" >カード情報</span>
+                                    </div>
+                                    
+									<div  class="col" id="card-info">
+								        <p>カードタイプ <span id="card-brand">取得中...</span></p>
+								        <p>カード番号: <span id="card-last4">**** **** **** </span></p>
+								        <p>有効期限: <span id="card-expiry">取得中...</span></p>
+								    </div>
+								</div>
+								
+								<form id="update-card-form">
+								    <div id="card-element"></div>
+								    <div id="card-errors" role="alert"></div>
+								    <button type="submit">Update Card</button>
+								</form> 
+
+								<div class="row pb-2 mb-2 border-bottom" sec:authorize="hasAnyAuthority('ROLE_PAID')">
 								    <form method="POST" th:action="@{/user/downgrade}">
 								        <div class="form-group">
 								            <!-- Subscription downgrade button triggers the modal -->
@@ -155,10 +173,9 @@
          </div>    
          
          <div th:replace="~{fragment :: scripts}"></div>  
-          <script src="https://js.stripe.com/v3"></script>
          <script th:inline="javascript">
-             const sessionId = /*[[${sessionId}]]*/"sessionId";                
-         </script>        
-         <script th:src="@{/js/stripe.js}"></script>   
+		    const subscriptionId = /*[[${subscriptionId}]]*/ "yourSubscriptionId";                
+		</script> 
+		<script th:src="@{/js/stripe.js}"></script>   
    </body>
  </html>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,8 @@ import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserNotFoundException;
 import com.example.nagoyameshi.service.UserService;
+import com.stripe.model.PaymentMethod;
+import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -117,6 +120,7 @@ public class UserController {
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
    
     @Transactional
     @GetMapping("/upgraded")
@@ -135,6 +139,7 @@ public class UserController {
         Map<String, String> paymentIntentObject = new HashMap<>();
         paymentIntentObject.put("customerEmail", session.getCustomerEmail());
         paymentIntentObject.put("subscriptionId", session.getSubscription());
+        paymentIntentObject.put("customerId", session.getCustomer()); 
         if (!paymentIntentObject.containsKey("customerEmail")) {
             logger.error("Invalid payment intent object: {}", paymentIntentObject);
             throw new IllegalArgumentException("Invalid payment intent data.");
@@ -143,6 +148,7 @@ public class UserController {
         // Extract the username and other relevant data from the payment intent object
         String userName = paymentIntentObject.get("customerEmail");
         String subscriptionId = paymentIntentObject.get("subscriptionId");
+        String customerId = paymentIntentObject.get("customerId");
 
         // Retrieve the user by email (assuming userName is the email)
         User user = userRepository.findByEmail(userName);
@@ -153,6 +159,7 @@ public class UserController {
             user.setPaidLicense(true); 
             user.setSubscriptionId(subscriptionId); // Update the user's membership status
             userRepository.save(user); // Save the updated user back to the repository
+            user.setCustomerId(customerId); 
             logger.info("User membership status updated for: {}", userName);
         } else {
             logger.warn("User not found for email: {}", userName);
@@ -218,4 +225,94 @@ public class UserController {
     public String showUpgradePage() {
         return "user/upgrade"; 
     }
+    
+    @Value("${stripe.api-key}")
+    private String stripeApiKey;
+    
+    @PostMapping("/retrieve-card-info")
+    public ResponseEntity<Map<String, Object>> retrieveCardInfo(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, 
+            Model model) {
+    	String subscriptionId = userDetailsImpl.getUser().getSubscriptionId();
+        try {
+            // Retrieve the subscription
+            Subscription subscription = Subscription.retrieve(subscriptionId);
+            String paymentMethodId = subscription.getDefaultPaymentMethod(); // Get default payment method ID
+
+            // Now retrieve the payment method details
+            if (paymentMethodId != null) {
+                PaymentMethod paymentMethod = PaymentMethod.retrieve(paymentMethodId);
+                // Convert to a suitable format to send back to the client
+                Map<String, Object> response = new HashMap<>();
+                response.put("card", paymentMethod.getCard());
+                model.addAttribute("subscriptionId", subscriptionId); 
+                return ResponseEntity.ok(response);
+            } else {
+            	model.addAttribute("subscriptionId", subscriptionId); 
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "No payment method found."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
+        }
+    }
+    
+  
+    public static class PaymentMethodBody {
+        private String paymentMethodId;
+
+        public String getPaymentMethodId() {
+            return paymentMethodId;
+        }
+
+        public void setPaymentMethodId(String paymentMethodId) {
+            this.paymentMethodId = paymentMethodId;
+        }
+    }
+
+//    @PostMapping("/update-card")
+//    public ResponseEntity<String> updateCard(@RequestBody PaymentMethodBody paymentMethodBody,
+//                                             UserDetailsImpl userDetailsImpl) {
+//        String paymentMethodId = paymentMethodBody.getPaymentMethodId();
+//        Integer userId = userDetailsImpl.getUser().getId(); // Retrieve the current user's ID
+//
+//        if (paymentMethodId == null || paymentMethodId.isEmpty()) {
+//            return ResponseEntity.badRequest().body("Payment method ID is required.");
+//        }
+//
+//        try {
+//
+//            User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+//            String customerId = user.getCustomerId();
+//            String subscriptionId = user.getSubscriptionId();
+//
+//            // Attach the new payment method to the customer
+//            PaymentMethodAttachParams attachParams = PaymentMethodAttachParams.builder()
+//                    .setCustomer(customerId)
+//                    .build();
+//
+//            // Attach the payment method using the paymentMethodId
+//            PaymentMethod paymentMethod = PaymentMethod.attach(paymentMethodId, attachParams); // Ensure correct parameters
+//
+//            // Update the subscription to use the new payment method
+//            SubscriptionUpdateParams updateParams = SubscriptionUpdateParams.builder()
+//                    .setDefaultPaymentMethod(paymentMethod.getId())
+//                    .build();
+//
+//            // Retrieve the subscription using the subscription ID
+//            Subscription subscription = Subscription.retrieve(subscriptionId);
+//            subscription.update(updateParams);
+//
+//            return ResponseEntity.ok("Card updated successfully.");
+//        } catch (StripeException stripeEx) {
+//            // Handle specific Stripe exceptions
+//            System.err.println("Stripe error updating card: " + stripeEx.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Failed to update card: " + stripeEx.getMessage());
+//        } catch (Exception e) {
+//            // Handle other exceptions
+//            System.err.println("Error updating card: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Failed to update card. " + e.getMessage());
+//        }
+//    }
 }
+

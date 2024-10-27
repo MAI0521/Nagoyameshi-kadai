@@ -140,7 +140,7 @@ public class PasswordResetController {
     } 
     
     @PostMapping("/newpw-login")
-    public String newpw(
+    public String newpwLogin(
             @ModelAttribute @Validated PasswordResetForm passwordResetForm, 
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
             BindingResult bindingResult, 
@@ -157,7 +157,7 @@ public class PasswordResetController {
             
         // Check for binding errors
         if (bindingResult.hasErrors()) {
-            return "auth/newpw";
+            return "user/newpw"; 
         }
         User user = userDetailsImpl.getUser();
         // Update the user's password
