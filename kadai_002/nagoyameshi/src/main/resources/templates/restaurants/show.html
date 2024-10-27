@@ -5,9 +5,9 @@
               
          <div th:replace="~{fragment :: styles}"></div>
          
-         <!-- Flatpickr -->
          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-           
+		 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+		 
          <title>店舗詳細</title>   
       </head>
      <body>
@@ -192,7 +192,12 @@
                                                          <label for="fromReservationDateTime" class="col-form-label text-md-left fw-bold">予約日時</label>    
                                                          <p class="small-text">(※営業時間内で指定してください)</p>
                                                          <div th:if="${#fields.hasErrors('fromReservationDateTime')}" class="text-danger small mb-2" th:errors="*{fromReservationDateTime}"></div>                                          
-                                                         <input type="text" class="form-control" placeholder="例: 2024-12-31 18:30" th:field="*{fromReservationDateTime}">                                                                     
+<!--                                                         <input type="text" class="form-control" placeholder="例: 2024-12-31 18:30" th:field="*{fromReservationDateTime}">                                                                     -->
+<!--                                                     	 <input type="datetime-local" step="1800" class="form-control" th:field="*{fromReservationDateTime}"> -->
+	
+<!--														 <input class="numInput flatpickr-hour" type="number" aria-label="Hour" tabindex="-1" step="1" min="0" max="23" maxlength="2"><span>時</span>-->
+<!--														 <input type="number" class="flatpickr-minute" aria-label="Minute" tabindex="-1" step="30" min="0" max="30"><span>分</span>-->
+														 <input type="text" class="form-control" id="reservationDateTime" th:field="*{fromReservationDateTime}" placeholder="希望日時を選択してください">	
                                                      </div>
                                                      
                                                      <div class="form-group mb-4">                                            
@@ -295,16 +300,20 @@
          <!-- Flatpickr -->
          <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
          <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
-         <script th:src="@{/js/flatpickr.js}"></script>    
+<!--         <script th:src="@{/js/flatpickr.js}"></script>    -->
          <script>
 		    document.addEventListener('DOMContentLoaded', function () {
 		        flatpickr("#reservationDateTime", {
 		            enableTime: true,
 		            dateFormat: "Y-m-d H:i",  // Custom date-time format
-		            time_24hr: true           // 24-hour time format
+		            time_24hr: true,   
+		            minuteIncrement: 30, 
+		            minDate: "today",
+      				maxDate: new Date().fp_incr(90),    
 		        });
 		    });
 		</script>
+		
 		</div>  
      </body>
  </html>
