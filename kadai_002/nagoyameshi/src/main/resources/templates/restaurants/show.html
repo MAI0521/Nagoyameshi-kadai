@@ -221,7 +221,7 @@
 			                        <h1 class="text-center">レビュー</h1>  
 			                    </div> 
 		                    <div>
-		                        <div sec:authorize="isAuthenticated()" class="d-flex flex-column align-items-center">
+		                        <div sec:authorize="hasAnyAuthority('ROLE_PAID')"  class="d-flex flex-column align-items-center">
 		                            <div class="form-group d-flex justify-content-center mt-4 w-100">              
 		                                <a th:href="@{/restaurants/__${restaurant.getId()}__/reviews/input}">
 		                                <button type="submit" class="btn text-white w-45 shadow-sm nagoyameshi-btn">レビューを投稿する</button></a>                          
