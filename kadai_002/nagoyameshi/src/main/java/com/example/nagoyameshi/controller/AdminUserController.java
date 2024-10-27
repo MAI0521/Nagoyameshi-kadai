@@ -1,6 +1,9 @@
 package com.example.nagoyameshi.controller;
 
+import java.util.Collections;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -24,17 +27,22 @@ public class AdminUserController {
     }    
     
     @GetMapping
-    public String index(@RequestParam(name = "keyword", required = false) String keyword, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
+    public String index(@RequestParam(name = "email", required = false) String email, 
+    		@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, Model model) {
         Page<User> userPage;
         
-        if (keyword != null && !keyword.isEmpty()) {
-            userPage = userRepository.findByFullNameLikeOrKanaLike("%" + keyword + "%", "%" + keyword + "%", pageable);                   
+        if (email != null && !email.isEmpty()) {
+//            userPage = userRepository.findByFullNameLikeOrKanaLike("%" + keyword + "%", "%" + keyword + "%", pageable); 
+        	User user = userRepository.findByEmail(email);
+        	userPage = new PageImpl<>(Collections.singletonList(user)); 
         } else {
             userPage = userRepository.findAll(pageable);
-        }        
+        }   
         
-        model.addAttribute("userPage", userPage);        
-        model.addAttribute("keyword", keyword);                
+        
+        model.addAttribute("userPage", userPage); 
+        model.addAttribute("email", email); 
+//        model.addAttribute("keyword", keyword);                
         
         return "admin/users/index";
     }
