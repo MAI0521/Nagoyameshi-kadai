@@ -22,7 +22,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/error/**", "/login/**", "/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants/**", "/stripe/webhook", "/pwreset/**", "/newpw/**", "/auth/**").permitAll()
                 .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
-                .requestMatchers("/favorites/**").hasAnyAuthority("ROLE_PAID")
+                .requestMatchers("/favorites/**", "/reviews/input").hasAnyAuthority("ROLE_PAID")
                 .requestMatchers("/user/create-checkout-session").authenticated()
                 .anyRequest().authenticated()
             )
