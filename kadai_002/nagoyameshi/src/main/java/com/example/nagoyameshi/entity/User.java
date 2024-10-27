@@ -53,6 +53,9 @@ public class User {
      
      @Column(name = "subscription_id")
      private String subscriptionId;
+     
+     @Column(name = "customer_id")
+     private String customerId;
 		 
 }
 

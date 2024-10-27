@@ -1,6 +1,7 @@
 package com.example.nagoyameshi.service;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,5 +120,10 @@ public class UserService {
 	public User findByEmail(String email) {
 	    return userRepository.findByEmail(email);
 	}
+	
+	public Optional<User> findById(Integer id) {
+	    return userRepository.findById(id);
+	}
+	
 
 }
