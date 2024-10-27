@@ -14,8 +14,20 @@
              
              <main>
                  <div class="container pt-4 pb-5 nagoyameshi-container">
+                     
+						 <div class="col-md-4"> <!-- Search Box Column -->
+				                <div class="nagoyameshi-dropdown">
+	                                 <form method="get" th:action="@{/admin/categories}" class="w-100 mb-3">
+	                                     <div class="input-group">
+	                                         <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="キーワード">
+	                                         <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+	                                     </div>               
+	                                 </form> 
+                                 </div>
+                             </div>
                      <div class="row justify-content-center">
                          <div class="col-xxl-9 col-xl-10 col-lg-11">
+							 
                              
                              <h1 class="mb-4 text-center">カテゴリー一覧</h1>   
                          
