@@ -40,7 +40,31 @@
 								                <a th:href="@{/admin/categories/__${category.getId()}__/edit}" class="float-end me-4" style="margin-right: 10px;">編集</a>
 								            </span>
 								            <span th:if="${category.id >= 1 and category.id <= 8}" class="text-muted float-end">編集不可（※トップページで使用のため※）</span>
-								        </td>                                                                                 
+								        </td>   
+								        <td><a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteCategoryModal' + category.getId()}">削除</a></td>     
+
+                                         <!-- 削除用モーダル -->
+                                         <div class="modal fade" th:id="${'deleteCategoryModal' + category.getId()}" tabindex="-1" th:aria-labelledby="${'deleteCategoryModalLabel' + category.getId()}">
+                                             <div class="modal-dialog">
+                                                 <div class="modal-content">
+                                                     <div class="modal-header">
+                                                         <h5 class="modal-title" th:id="${'deleteCategoryModalLabel' + category.getId()}" th:text="${category.getName() + 'を削除してもよろしいですか？'}"></h5>
+                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                                                     </div>
+                                                     <div class="modal-body">
+								                		 <h6>※登録されている店舗のカテゴリー名は「その他」に更新されます。</h6>
+                                                     </div>
+                                                     <div class="modal-footer">
+													    <form method="post" th:action="@{/admin/categories/__${category.getId()}__/delete}">
+													        <!-- CSRF Token for security -->
+													        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+													        <input type="hidden" name="_method" value="DELETE"/> <!-- This indicates to treat as DELETE -->
+													        <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
+													    </form>
+													</div>
+                                                 </div>
+                                             </div>
+                                         </div>                                                                               
                                      </tr>                                      
                                  </tbody>
                              </table>

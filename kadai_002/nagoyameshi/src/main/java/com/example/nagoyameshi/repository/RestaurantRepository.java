@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.nagoyameshi.entity.Restaurant;
+
+import jakarta.transaction.Transactional;
 
  public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 	public Page<Restaurant> findByVenueNameLike(String keyword, Pageable pageable);
@@ -83,5 +86,11 @@ import com.example.nagoyameshi.entity.Restaurant;
 	            "GROUP BY r.id " +
 	            "ORDER BY COUNT(rv.id) DESC")
 	public List<Restaurant> findTop3RestaurantsByOrderByReviewCountDesc(Pageable pageable);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE Restaurant r SET r.category.id = 8 WHERE r.category.id = :categoryId")
+	Integer findByCategoryIdUpdateCategory(Integer categoryId);
+
 	    
  }
