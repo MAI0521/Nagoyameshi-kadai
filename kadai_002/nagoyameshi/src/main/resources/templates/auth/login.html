@@ -30,14 +30,14 @@
                             
                              <form th:action="@{/login}" method="post">
                                  <div class="form-group mb-3">
-                                     <input type="text" class="form-control" name="username" autocomplete="email" placeholder="メールアドレス" autofocus>
+                                     <input type="text" class="form-control"id="username" name="username" autocomplete="email" placeholder="メールアドレス" autofocus>
                                  </div>
                                  <div class="form-group mb-3">
-                                     <input type="password" class="form-control" name="password" autocomplete="new-password" placeholder="パスワード">
+                                     <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" placeholder="パスワード">
                                  </div>
                                  
                                  <div class="form-group d-flex justify-content-center my-4">
-                                     <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">ログイン</button>
+                                     <button type="submit" id="login" class="btn text-white shadow-sm w-100 nagoyameshi-btn">ログイン</button>
                                  </div>
                              </form>
                              
