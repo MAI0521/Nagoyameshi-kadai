@@ -20,7 +20,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/login/**", "/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants/**", "/stripe/webhook", "/pwreset/**", "/newpw/**", "/auth/**").permitAll()
+                .requestMatchers("/error/**", "/login/**", "/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants/**", "/stripe/webhook", "/pwreset/**", "/newpw/**", "/auth/**").permitAll()
                 .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers("/favorites/**").hasAnyAuthority("ROLE_PAID")
                 .requestMatchers("/user/create-checkout-session").authenticated()

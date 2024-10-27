@@ -139,7 +139,6 @@ public class UserController {
         Map<String, String> paymentIntentObject = new HashMap<>();
         paymentIntentObject.put("customerEmail", session.getCustomerEmail());
         paymentIntentObject.put("subscriptionId", session.getSubscription());
-        paymentIntentObject.put("customerId", session.getCustomer()); 
         if (!paymentIntentObject.containsKey("customerEmail")) {
             logger.error("Invalid payment intent object: {}", paymentIntentObject);
             throw new IllegalArgumentException("Invalid payment intent data.");
@@ -148,7 +147,6 @@ public class UserController {
         // Extract the username and other relevant data from the payment intent object
         String userName = paymentIntentObject.get("customerEmail");
         String subscriptionId = paymentIntentObject.get("subscriptionId");
-        String customerId = paymentIntentObject.get("customerId");
 
         // Retrieve the user by email (assuming userName is the email)
         User user = userRepository.findByEmail(userName);
@@ -159,7 +157,6 @@ public class UserController {
             user.setPaidLicense(true); 
             user.setSubscriptionId(subscriptionId); // Update the user's membership status
             userRepository.save(user); // Save the updated user back to the repository
-            user.setCustomerId(customerId); 
             logger.info("User membership status updated for: {}", userName);
         } else {
             logger.warn("User not found for email: {}", userName);
@@ -268,51 +265,6 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/update-card")
-//    public ResponseEntity<String> updateCard(@RequestBody PaymentMethodBody paymentMethodBody,
-//                                             UserDetailsImpl userDetailsImpl) {
-//        String paymentMethodId = paymentMethodBody.getPaymentMethodId();
-//        Integer userId = userDetailsImpl.getUser().getId(); // Retrieve the current user's ID
-//
-//        if (paymentMethodId == null || paymentMethodId.isEmpty()) {
-//            return ResponseEntity.badRequest().body("Payment method ID is required.");
-//        }
-//
-//        try {
-//
-//            User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
-//            String customerId = user.getCustomerId();
-//            String subscriptionId = user.getSubscriptionId();
-//
-//            // Attach the new payment method to the customer
-//            PaymentMethodAttachParams attachParams = PaymentMethodAttachParams.builder()
-//                    .setCustomer(customerId)
-//                    .build();
-//
-//            // Attach the payment method using the paymentMethodId
-//            PaymentMethod paymentMethod = PaymentMethod.attach(paymentMethodId, attachParams); // Ensure correct parameters
-//
-//            // Update the subscription to use the new payment method
-//            SubscriptionUpdateParams updateParams = SubscriptionUpdateParams.builder()
-//                    .setDefaultPaymentMethod(paymentMethod.getId())
-//                    .build();
-//
-//            // Retrieve the subscription using the subscription ID
-//            Subscription subscription = Subscription.retrieve(subscriptionId);
-//            subscription.update(updateParams);
-//
-//            return ResponseEntity.ok("Card updated successfully.");
-//        } catch (StripeException stripeEx) {
-//            // Handle specific Stripe exceptions
-//            System.err.println("Stripe error updating card: " + stripeEx.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Failed to update card: " + stripeEx.getMessage());
-//        } catch (Exception e) {
-//            // Handle other exceptions
-//            System.err.println("Error updating card: " + e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Failed to update card. " + e.getMessage());
-//        }
-//    }
+  
 }
 
