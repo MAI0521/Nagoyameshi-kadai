@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.form.CategoryEditForm;
 import com.example.nagoyameshi.form.CategoryRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.CategoryService;
 
 @Controller
@@ -27,10 +29,12 @@ import com.example.nagoyameshi.service.CategoryService;
 public class AdminCateogryController {
     private final CategoryRepository categoryRepository;      
     private final CategoryService categoryService; 
+    private final RestaurantRepository restaurantRepository;
     
-    public AdminCateogryController(CategoryRepository categoryRepository, CategoryService categoryService) {
+    public AdminCateogryController(CategoryRepository categoryRepository, CategoryService categoryService, RestaurantRepository restaurantRepository) {
         this.categoryRepository = categoryRepository;  
         this.categoryService = categoryService;
+        this.restaurantRepository = restaurantRepository;
     }    
     
     @GetMapping
@@ -88,8 +92,10 @@ public class AdminCateogryController {
         return "redirect:/admin/categories";
     }   
     
-    @PostMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {        
+        
+        restaurantRepository.findByCategoryIdUpdateCategory(id);
         categoryRepository.deleteById(id);
                 
         redirectAttributes.addFlashAttribute("successMessage", "カテゴリーを削除しました。");
